@@ -62,7 +62,7 @@ namespace Game
         private AbilitiesContext CreateAbilitiesContext(Transform placeForUi, IAbilityActivator abilityActivator)
         {
             var context = new AbilitiesContext(placeForUi, abilityActivator);
-            AddController(context);
+            AddContext(context);
 
             return context;
         }
