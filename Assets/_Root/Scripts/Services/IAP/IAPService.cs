@@ -6,6 +6,9 @@ namespace Services.IAP
 {
     internal class IAPService : MonoBehaviour, IStoreListener, IIAPService
     {
+        private static IAPService _instance;
+        public static IAPService Instance => _instance ??= FindObjectOfType<IAPService>();
+
         [Header("Components")]
         [SerializeField] private ProductLibrary _productLibrary;
 
@@ -21,8 +24,12 @@ namespace Services.IAP
         private IStoreController _controller;
 
 
-        private void Awake() =>
+        private void Awake() 
+        {
+            _instance ??= this;
+            
             InitializeProducts();
+        }
 
         private void InitializeProducts()
         {
