@@ -1,6 +1,8 @@
 using Profile;
 using Tool;
 using UnityEngine;
+using Services.Analytics;
+using Services.Ads.UnityAds;
 using Object = UnityEngine.Object;
 
 namespace Ui
@@ -29,7 +31,12 @@ namespace Ui
             return objectView.GetComponent<MainMenuView>();
         }
 
-        private void StartGame() =>
+        private void StartGame() 
+        {
             _profilePlayer.CurrentState.Value = GameState.Game;
+
+            AnalyticsManager.Instance.SendPlayPressed();
+            UnityAdsService.Instance.RewardedPlayer.Play();
+        }
     }
 }

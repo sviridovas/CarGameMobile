@@ -9,8 +9,6 @@ internal class EntryPoint : MonoBehaviour
     private const GameState InitialState = GameState.Start;
 
     [SerializeField] private Transform _placeForUi;
-    [SerializeField] private UnityAdsService _adsService;
-    [SerializeField] private AnalyticsManager _analytics;
 
     private MainController _mainController;
 
@@ -20,18 +18,20 @@ internal class EntryPoint : MonoBehaviour
         var profilePlayer = new ProfilePlayer(SpeedCar, InitialState);
         _mainController = new MainController(_placeForUi, profilePlayer);
 
-        _analytics.SendMainMenuOpened();
+        AnalyticsManager.Instance.SendMainMenuOpened();
 
-        if (_adsService.IsInitialized) OnAdsInitialized();
-        else _adsService.Initialized.AddListener(OnAdsInitialized);
+        if (UnityAdsService.Instance.IsInitialized) 
+            OnAdsInitialized();
+        else 
+            UnityAdsService.Instance.Initialized.AddListener(OnAdsInitialized);
     }
 
     private void OnDestroy()
     {
-        _adsService.Initialized.RemoveListener(OnAdsInitialized);
+        UnityAdsService.Instance.Initialized.RemoveListener(OnAdsInitialized);
         _mainController.Dispose();
     }
 
 
-    private void OnAdsInitialized() => _adsService.InterstitialPlayer.Play();
+    private void OnAdsInitialized() => UnityAdsService.Instance.InterstitialPlayer.Play();
 }

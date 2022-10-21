@@ -6,6 +6,9 @@ namespace Services.Ads.UnityAds
 {
     internal class UnityAdsService : MonoBehaviour, IUnityAdsInitializationListener, IAdsService
     {
+        private static UnityAdsService _instance;
+        public static UnityAdsService Instance => _instance ??= FindObjectOfType<UnityAdsService>();
+
         [Header("Components")]
         [SerializeField] private UnityAdsSettings _settings;
 
@@ -20,6 +23,8 @@ namespace Services.Ads.UnityAds
 
         private void Awake()
         {
+            _instance ??= this;
+            
             InitializeAds();
             InitializePlayers();
         }
@@ -45,7 +50,9 @@ namespace Services.Ads.UnityAds
                 : new StubPlayer("");
 
         private IAdsPlayer CreateRewarded() =>
-            new StubPlayer("");
+            _settings.Rewarded.Enabled
+                ? new RewardedPlayer(_settings.Rewarded.Id)
+                : new StubPlayer("");
 
         private IAdsPlayer CreateBanner() =>
             new StubPlayer("");
