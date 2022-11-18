@@ -28,10 +28,14 @@ namespace Features.AbilitySystem.Abilities
 
         public void Apply(IAbilityActivator activator)
         {
-            if (_isActive)
-                return;
+            var rig = activator.ViewGameObject.GetComponent<Rigidbody2D>();
+            Vector3 force = activator.ViewGameObject.transform.up * _abilityItem.Value;
+            rig.AddForce(force, ForceMode2D.Force);
 
-            StartAbility(activator);
+            // if (_isActive)
+            //     return;
+
+            // StartAbility(activator);
         }
 
         private void StartAbility(IAbilityActivator activator)
